@@ -18,6 +18,14 @@ defmodule Shorty.Webserver.Router do
     data |> resp_json(conn, 200)
   end
 
+  get "/:id" do
+    {data, code} = Shorty.Routes.GetRedirectRoute.response(id)
+    case code do
+      301 ->  redirect(conn,  data)
+      _ -> data |> resp_json(conn, 200)
+    end
+  end
+
   match _ do
     if conn.method == "OPTIONS" do
       data = %{message: "ok", code: 200}
