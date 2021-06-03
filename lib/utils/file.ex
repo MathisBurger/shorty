@@ -27,7 +27,7 @@ defmodule Shorty.Utils.FileUtils do
     redirects = String.split(data, "\n")
     arr = for i <- redirects do
       [first, second] = String.split(i, " ")
-      {first, second}
+      {first, String.replace(second, "\r", "")}
     end
     arr
   end
