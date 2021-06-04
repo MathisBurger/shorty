@@ -1,8 +1,8 @@
 <div class='navbar'>
 	<div class='navbar-menu'>
-		<a>Home</a>
-		<a>About</a>
-		<a>privacy</a>
+		<a href='/'>Home</a>
+		<a href='/about'>About</a>
+		<a href='/privacy'>privacy</a>
 	</div>
 </div>
 
@@ -29,6 +29,7 @@
 		font-size: 1.4em;
 		cursor: pointer;
 		transition: .3s;
+		text-decoration: none;
 	}
 	.navbar-menu a:hover {
 		color: #acacac;
