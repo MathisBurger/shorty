@@ -47,7 +47,7 @@ defmodule Shorty.Routes.GetRedirectRoute do
     value from the final tuple
   """
   def accessValue(value) do
-    {_, value} = value
-    value
+    {_, val} = value
+    val
   end
 end

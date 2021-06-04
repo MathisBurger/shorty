@@ -18,8 +18,6 @@ defmodule Shorty.Routes.AddRedirectRoute do
   def process(url) do
     {_, redirects} = Shorty.Utils.FileUtils.readRedirects()
     rand = recursiveRandomGenerator(redirects)
-    IO.puts rand
-    IO.puts url
     Shorty.Utils.FileUtils.insertNew(rand, url)
     %{"message": "successfully added new redirect", "id": rand, "code": 200}
   end

@@ -25,11 +25,10 @@ defmodule Shorty.Utils.FileUtils do
   """
   def parseRaw(data) do
     redirects = String.split(data, "\n")
+    redirects = List.delete_at(redirects, Enum.count(redirects)-1)
     arr = for i <- redirects do
-      if i != "" do
-        [first, second] = String.split(i, " ")
-        {first, String.replace(second, "\r", "")}
-      end
+      [first, second] = String.split(i, " ")
+      {first, String.replace(second, "\r", "")}
     end
     arr
   end
