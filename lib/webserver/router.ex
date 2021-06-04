@@ -18,6 +18,11 @@ defmodule Shorty.Webserver.Router do
     data |> resp_json(conn, 200)
   end
 
+  post "/api/addRedirect" do
+    data = Shorty.Routes.AddRedirectRoute.response(conn.body_params)
+    data |> resp_json(conn, 200)
+  end
+
   get "/:id" do
     {data, code} = Shorty.Routes.GetRedirectRoute.response(id)
     case code do

@@ -26,10 +26,24 @@ defmodule Shorty.Utils.FileUtils do
   def parseRaw(data) do
     redirects = String.split(data, "\n")
     arr = for i <- redirects do
-      [first, second] = String.split(i, " ")
-      {first, String.replace(second, "\r", "")}
+      if i != "" do
+        [first, second] = String.split(i, " ")
+        {first, String.replace(second, "\r", "")}
+      end
     end
     arr
+  end
+
+  @doc """
+    This function writes a new entry to
+    the data.txt file
+  """
+  def insertNew(rand, url) do
+    {_, data} = File.read("./data.txt")
+    data = data <> rand <> " " <> url <> "\n"
+    {_, file} = File.open("./data.txt", [:write])
+    IO.binwrite(file, data)
+    File.close(file)
   end
 
 end
