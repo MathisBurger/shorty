@@ -3,5 +3,13 @@
 </svelte:head>
 
 <div>
-	Svelte is great
+	<Navbar />
 </div>
+
+<script lang="ts">
+	import Navbar from "../lib/navbar.svelte";
+</script>
+
+<style lang='scss'>
+
+</style>
