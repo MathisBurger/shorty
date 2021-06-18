@@ -5,30 +5,60 @@
 <script lang="ts">
 	import Navbar from "../lib/navbar.svelte";
 	import Snackbar from "../lib/snackbar.svelte";
+	import Overlay from "../lib/overlay.svelte";
 
 	let snackbar;
 	let snackbarText: string;
+	let snackbarColor: string;
 	let inputValue: string = '';
+	let addedRedirect: boolean = false;
 
-	function onSubmit(e: KeyboardEvent): void {
+	// This function is being executed, if you
+	// type something in the input. It checks,
+	// if you pressed enter. Then the string will
+	// be checked and the shorted url is being generated.
+	 async function onSubmit(e: KeyboardEvent) {
 		if (e.key === "Enter") {
-			snackbar.showMessage();
+			if (!validateUrl(inputValue)) {
+
+				snackbarText = "given url not valid";
+				snackbarColor = "red";
+				snackbar.showMessage();
+
+			} else {
+				toggleAddedRedirect();
+			}
 		}
 	}
 
+	// This function validates, weather the given url is a real
+	// url, or only an random string.
+	// It makes sure, that only valid url strings can be used .
 	function validateUrl(url: string): boolean {
-		return false;
+		return (url.includes("http://") || url.includes("https://")) &&
+			url.includes(".");
 	}
+
+	// This function toggles the value
+	// of the addedRedirect value.
+	function toggleAddedRedirect(): void {
+	 	addedRedirect = !addedRedirect;
+	}
+
 </script>
+
+{#if addedRedirect}
+	<Overlay message='nice' shortURL='https://mathis-burger.de' />
+{/if}
 
 <div>
 	<Navbar />
 	<div class='container'>
-		<input type='text' on:keydown={e => onSubmit(e)} value={inputValue}>
+		<input type='text' on:keydown={e => onSubmit(e)} bind:value={inputValue}>
 	</div>
 </div>
 
-<Snackbar color='green' timeout={2000} bind:this={snackbar} text={snackbarText} />
+<Snackbar color={snackbarColor} timeout={2000} bind:this={snackbar} text={snackbarText} />
 
 <style lang='scss'>
 	.container {

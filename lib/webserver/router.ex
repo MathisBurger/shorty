@@ -12,6 +12,7 @@ defmodule Shorty.Webserver.Router do
 
   plug :match
   plug :dispatch
+  plug CORSPlug
 
   get "/api" do
     data = Shorty.Routes.DefaultRoute.response()
