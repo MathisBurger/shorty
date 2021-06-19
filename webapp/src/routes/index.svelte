@@ -11,24 +11,28 @@
 	let snackbarText: string;
 	let snackbarColor: string;
 	let inputValue: string = '';
-	let addedRedirect: boolean = false;
 
 	// This function is being executed, if you
 	// type something in the input. It checks,
 	// if you pressed enter. Then the string will
 	// be checked and the shorted url is being generated.
-	 async function onSubmit(e: KeyboardEvent) {
+	function onSubmit(e: KeyboardEvent) {
 		if (e.key === "Enter") {
 			if (!validateUrl(inputValue)) {
-
-				snackbarText = "given url not valid";
-				snackbarColor = "red";
-				snackbar.showMessage();
-
+				showSnackbar("Invalid url", "red");
 			} else {
-				toggleAddedRedirect();
+				addRedirect();
 			}
 		}
+	}
+
+	// This function shows the snackbar and
+	// inserts the required texts and colors
+	// for it, to get it to work
+	function showSnackbar(text, color) {
+		snackbarText = text;
+		snackbarColor = color;
+		snackbar.showMessage();
 	}
 
 	// This function validates, weather the given url is a real
@@ -39,17 +43,25 @@
 			url.includes(".");
 	}
 
-	// This function toggles the value
-	// of the addedRedirect value.
-	function toggleAddedRedirect(): void {
-	 	addedRedirect = !addedRedirect;
+	// This function tries to create a new short
+	// url. If the action was successful, the server
+	// returns HTTP OK and the url is shown in the
+	// overlay
+	async function addRedirect() {
+		let origin = process.env.NODE_ENV === "development" ? "http://localhost:8080/api" : "/api"
+		let data = await (await fetch(`${origin}/addRedirect`, {
+			mode: process.env.NODE_ENV === "development" ? "cors" : "same-origin",
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({url: "https://pornhub.com"})
+		})).json();
 	}
 
 </script>
 
-{#if addedRedirect}
-	<Overlay message='nice' shortURL='https://mathis-burger.de' />
-{/if}
 
 <div>
 	<Navbar />
@@ -61,28 +73,28 @@
 <Snackbar color={snackbarColor} timeout={2000} bind:this={snackbar} text={snackbarText} />
 
 <style lang='scss'>
-	.container {
+  .container {
     display: grid;
     place-items: center;
-		width: 100vw;
-		height: 100vh;
+    width: 100vw;
+    height: 100vh;
   }
-	.container input {
-		padding: 20px 170px;
-		background: #2e2d35;
-		border: 2px solid #232228;
-		border-radius: 10px;
-		outline: none;
-		font-size: 1.5em;
-		color: white;
-		transition: .3s;
-		text-align: center;
-	}
-	.container input:hover {
-		filter: brightness(1.2);
-	}
-	.container input:focus {
+  .container input {
+    padding: 20px 170px;
+    background: #2e2d35;
+    border: 2px solid #232228;
+    border-radius: 10px;
+    outline: none;
+    font-size: 1.5em;
+    color: white;
+    transition: .3s;
+    text-align: center;
+  }
+  .container input:hover {
+    filter: brightness(1.2);
+  }
+  .container input:focus {
     box-shadow: 2px 2px 2px rgba(0,0,0,0.6);
     transform: scale(1.02);
-	}
+  }
 </style>
